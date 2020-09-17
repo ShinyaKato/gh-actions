@@ -28,3 +28,14 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+
+      - name: Push test
+        run: |
+          git config --global user.name "[bot] github-actions"
+          git config --global user.email "github-actions@example.com"
+
+          echo "written by github actions" >> test.txt
+
+          git add -A
+          git commit -m "[gh-actions] Update test.txt"
+          git push

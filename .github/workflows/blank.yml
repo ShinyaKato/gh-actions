@@ -8,7 +8,7 @@ on:
         required: true
 
 jobs:
-  update_version_name:
+  create_release_pr:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -24,16 +24,8 @@ jobs:
           git commit -m "[gh-actions] Update versionName: ${{ github.event.inputs.release_version_name }}"
           git push
 
-  create_release_pr:
-    runs-on: Ubuntu-latest
-    needs: update_version_name
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: test
-        run: |
-          cat version.txt
-
-      - uses: peter-evans/create-pull-request@v3
+      - name: Create release PR
+        uses: peter-evans/create-pull-request@v3
         with:
-          branch: example-patch
+          branch: release_test
+          base: master

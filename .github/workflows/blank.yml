@@ -3,12 +3,12 @@ name: Create Release PR
 on:
   workflow_dispatch:
     inputs:
-      releaseVersionName:
+      release_version_name:
         description: new versionName
         required: true
 
 jobs:
-  update-version-name:
+  update_version_name:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,8 +19,22 @@ jobs:
           git config --global user.name "[bot] github-actions"
           git config --global user.email "github-actions@example.com"
 
-          echo "${{ github.event.inputs.releaseVersionName }}" > test.txt
+          echo "${{ github.event.inputs.release_version_name }}" > version.txt
 
           git add -A
-          git commit -m "[gh-actions] Update versionName"
+          git commit -m "[gh-actions] Update versionName: ${{ github.event.inputs.release_version_name }}"
           git push
+
+  create_release_pr:
+    runs-on: Ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: test
+        run: |
+          cat version.txt
+
+      - uses: peter-evans/create-pull-request@v3
+        with:
+          branch: example-patch
